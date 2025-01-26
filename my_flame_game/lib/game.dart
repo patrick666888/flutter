@@ -9,13 +9,13 @@ class MainMenu extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // 開始遊戲邏輯
+            // 开始游戏逻辑
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => GameWidget(game: MyGame())),
             );
           },
-          child: Text('開始遊戲'),
+          child: const Text('开始游戏'),
         ),
       ),
     );
@@ -27,7 +27,8 @@ class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    player = Player();
+    player = Player(); // 创建 Player 实例
+    await player.loadSprite(); // 加载精灵
     add(player);
   }
 
@@ -39,17 +40,17 @@ class MyGame extends FlameGame {
 }
 
 class Player extends SpriteComponent {
-  static const double speed = 200; // 移動速度
+  static const double speed = 200; // 移动速度
 
-  Player() {
-    // 將玩家的精靈設置為一個圖像
-    sprite = await loadSprite('player.png'); // 確保有這個圖像
-    size = Vector2(50, 50);
-    position = Vector2(100, 100);
+  Player() : super(size: Vector2(50, 50), position: Vector2(100, 100));
+
+  Future<void> loadSprite() async {
+    // 加载玩家的精灵图像
+    sprite = await loadSprite('player.png'); // 确保有这个图像
   }
 
   void update(double dt) {
-    // 處理玩家移動邏輯
+    // 处理玩家移动逻辑
     if (joystick.isMoving) {
       position.add(joystick.direction * speed * dt);
     }
