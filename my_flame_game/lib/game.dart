@@ -1,28 +1,9 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
+import 'package:flame/input.dart'; // 添加 joystick 所需的包
 
-class MainMenu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // 开始游戏逻辑
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => GameWidget(game: MyGame())),
-            );
-          },
-          child: const Text('开始游戏'),
-        ),
-      ),
-    );
-  }
-}
-
-class MyGame extends FlameGame {
+class MyGame extends FlameGame with HasDraggables, HasTappables { // 使用 HasDraggables 和 HasTappables
   late Player player;
 
   @override
@@ -35,7 +16,7 @@ class MyGame extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
-    player.update(dt);
+    player.update(dt); // 移除 joystick 参数
   }
 }
 
@@ -50,9 +31,6 @@ class Player extends SpriteComponent {
   }
 
   void update(double dt) {
-    // 处理玩家移动逻辑
-    if (joystick.isMoving) {
-      position.add(joystick.direction * speed * dt);
-    }
+    // 这里可以处理其他更新逻辑
   }
 }
